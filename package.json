@@ -1,6 +1,6 @@
 {
   "name": "keyword-trie-js",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "replace keywords base trie",
   "main": "TrieTree.js",
   "scripts": {

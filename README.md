@@ -10,7 +10,7 @@ npm install --save keyword-trie-js
 ## usage
 ``` js
 function replaceFunc(replace) {
-  return new Array(replace.length).fill('*').join();
+  return new Array(replace.length).fill('*');
 }
 
 const TrieTree = require('keyword-trie-js');
