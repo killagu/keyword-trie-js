@@ -2,6 +2,10 @@
 replace keywords base trie
 thanks for https://github.com/xhlian/keyword
 
+## install
+```
+npm install --save keyword-trie-js
+```
 
 ## usage
 ``` js
