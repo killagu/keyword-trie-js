@@ -11,6 +11,10 @@ class TrieTree {
     this.skipWords = new Set();
   }
 
+  /**
+   * add word should replace
+   * @param {string} word
+   */
   add(word) {
     if (!word) throw new TypeError(`word ${word} is empty`);
     if (this.compiled) throw new Error(`tree is compiled`);
@@ -18,19 +22,36 @@ class TrieTree {
     last.setResult(word);
   }
 
+  /**
+   * add word should skip
+   * @param {string} word
+   */
   addSkip(word) {
     this.skipWords.add(word);
   }
 
+  /**
+   * add words should skip
+   * @param {Array.<string>} words
+   */
   addSkipWords(words) {
     words.forEach(t => this.addSkip(t));
   }
 
+  /**
+   * compile and build fail path
+   */
   compile() {
     this.buildFailPath();
     this.compiled = true;
   }
 
+  /**
+   * replace input with func
+   * @param {string} input
+   * @param {function} func func should accept string return string[]
+   * @return {string}
+   */
   replace(input, func) {
     let ret = [];
     const length = input.length;
@@ -71,6 +92,9 @@ class TrieTree {
     ret.push.apply(ret, func(preKeyword));
   }
 
+  /**
+   * build fail path
+   */
   buildFailPath() {
     const nodes = [];
     const keys = this.root.keys;
