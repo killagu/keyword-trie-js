@@ -63,18 +63,37 @@ describe('test tree', () => {
   });
 
   describe('overlap replace', () => {
-    before(() => {
-      keywords = ['55', '551'];
-      str = '555test551555';
+
+    describe('55,551', () => {
+      before(() => {
+        keywords = ['55', '551'];
+        str = '555test551555';
+      });
+
+      it('should success', () => {
+        const tree = new TrieTree();
+        keywords.forEach(t => tree.add(t));
+        tree.compile();
+        const res = tree.replace(str, replaceFunc);
+        should.equal(res, '**5test*****5');
+      });
     });
 
-    it('should success', () => {
-      const tree = new TrieTree();
-      keywords.forEach(t => tree.add(t));
-      tree.compile();
-      const res = tree.replace(str, replaceFunc);
-      should.equal(res, '**5test*****5');
+    describe('552,551', () => {
+      before(() => {
+        keywords = ['552', '551'];
+        str = '552test551555';
+      });
+
+      it('should success', () => {
+        const tree = new TrieTree();
+        keywords.forEach(t => tree.add(t));
+        tree.compile();
+        const res = tree.replace(str, replaceFunc);
+        should.equal(res, '***test***555');
+      });
     });
+
   });
 
   describe('ten thousand keywords', () => {

@@ -49,6 +49,7 @@ class TrieTree {
         this.replaceStr(ret, preKeyword, func, count);
         count = 0;
         preKeyword = null;
+        last = this.root;
       }
       last = last.get(ch) || this.root;
       if (last.getResult()) {
