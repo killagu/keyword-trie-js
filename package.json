@@ -1,8 +1,8 @@
 {
   "name": "keyword-trie-js",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "replace keywords base trie",
-  "main": "index.js",
+  "main": "TrieTree.js",
   "scripts": {
     "test": "make test",
     "cov": "make test-cov"
@@ -21,9 +21,6 @@
     "url": "https://github.com/killa123/keyword-trie-js/issues"
   },
   "homepage": "https://github.com/killa123/keyword-trie-js#readme",
-  "dependencies": {
-    "debug": "^2.6.8"
-  },
   "devDependencies": {
     "istanbul": "^0.4.5",
     "mocha": "^3.4.2",
