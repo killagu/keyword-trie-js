@@ -10,8 +10,26 @@ describe('test tree', () => {
   let keywords, str, replaceFunc;
   before(() => {
     replaceFunc = rep => {
+      if (!rep) {
+        console.log(new Error().stack);
+      }
       return new Array(rep.length).fill('*')
     };
+  });
+
+  describe('test single replace', () => {
+    before(() => {
+      keywords = ['4'];
+      str = '123456';
+    });
+
+    it('should success', () => {
+      const tree = new TrieTree();
+      keywords.forEach(t => tree.add(t));
+      tree.compile();
+      const res = tree.replace(str, replaceFunc);
+      should.equal(res, '123*56');
+    });
   });
 
   describe('test replace', () => {
@@ -64,6 +82,36 @@ describe('test tree', () => {
 
   describe('overlap replace', () => {
 
+    describe('4,5,54式,45式', () => {
+      before(() => {
+        keywords = ['4', '5', '54式', '45式'];
+        str = '123456';
+      });
+
+      it('should success', () => {
+        const tree = new TrieTree();
+        keywords.forEach(t => tree.add(t));
+        tree.compile();
+        const res = tree.replace(str, replaceFunc);
+        should.equal(res, '123**6');
+      });
+    });
+
+    describe('4,5,55', () => {
+      before(() => {
+        keywords = ['4', '5', '45式'];
+        str = '123456';
+      });
+
+      it('should success', () => {
+        const tree = new TrieTree();
+        keywords.forEach(t => tree.add(t));
+        tree.compile();
+        const res = tree.replace(str, replaceFunc);
+        should.equal(res, '123**6');
+      });
+    });
+
     describe('55,551', () => {
       before(() => {
         keywords = ['55', '551'];
@@ -94,10 +142,71 @@ describe('test tree', () => {
       });
     });
 
+    describe('553532,553542', () => {
+      before(() => {
+        keywords = ['553532', '553542'];
+        str = '553532553542553522';
+      });
+
+      it('should success', () => {
+        const tree = new TrieTree();
+        keywords.forEach(t => tree.add(t));
+        tree.compile();
+        const res = tree.replace(str, replaceFunc);
+        should.equal(res, '************553522');
+      });
+    });
+
+  });
+
+  describe('last word', () => {
+    describe('5,6', () => {
+      before(() => {
+        keywords = ['5', '6', '56', '65', '56式'];
+        str = '56';
+      });
+
+      it('should success', () => {
+        const tree = new TrieTree();
+        keywords.forEach(t => tree.add(t));
+        tree.compile();
+        const res = tree.replace(str, replaceFunc);
+        should.equal(res, '**');
+      });
+    });
+
+    describe('567', () => {
+      before(() => {
+        keywords = ['567'];
+        str = 'test567';
+      });
+
+      it('should success', () => {
+        const tree = new TrieTree();
+        keywords.forEach(t => tree.add(t));
+        tree.compile();
+        const res = tree.replace(str, replaceFunc);
+        should.equal(res, 'test***');
+      });
+    });
+
   });
 
   describe('ten thousand keywords', () => {
     let tree;
+    let st;
+
+    function startTime() {
+      st = process.hrtime();
+    }
+
+    function endTime(msg) {
+      msg = msg || '';
+      const diff = process.hrtime(st);
+      const duration = diff[0] * 1e3 + diff[1] * 1e-6;
+      console.log(msg + duration);
+    }
+
     before(() => {
       keywords = dirty;
       str = `5月31日下午，上海市经信委主任陈鸣波在市政府新闻发布会上介绍了上海市政府最新出台的《关于创新驱动发展巩固提升实体经济能级的若干意见》主要内容，指出将聚焦政策，突破、优化振兴实体经济新举措。
@@ -121,7 +230,9 @@ describe('test tree', () => {
     });
 
     it('should success', () => {
+      startTime();
       tree.replace(str, replaceFunc);
+      endTime('replace cost: ');
     });
   });
 });

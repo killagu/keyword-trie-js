@@ -8,6 +8,7 @@ class TrieNode {
     this.fail = null;
     this.result = null;
     this.keys = [];
+    this.leaf = false;
   }
 
   extend(word) {
@@ -16,12 +17,17 @@ class TrieNode {
     for (let i = 0; i < length; ++i) {
       node = node.touchChild(word[i]);
     }
+    node.leaf = true;
+    node.setResult(word);
     return node;
   }
 
   touchChild(ch) {
     const child = this.get(ch);
-    if (child) return child;
+    if (child) {
+      child.leaf = false;
+      return child;
+    }
     const next = new TrieNode();
     this.put(ch, next);
     return next;

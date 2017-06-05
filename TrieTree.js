@@ -58,6 +58,7 @@ class TrieTree {
     let last = this.root;
     let preKeyword = null;
     let count = 0;
+    let buf = [];
     for (let i = 0; i < length; ++i) {
       const ch = input[i];
       if (this.skipWords.has(ch)) continue;
@@ -66,29 +67,49 @@ class TrieTree {
         last = last.getFail();
         failed = true;
       }
-      if (failed && preKeyword) {
-        this.replaceStr(ret, preKeyword, func, count);
+      if (failed) {
+        const match = count - (preKeyword && preKeyword.length);
         count = 0;
-        preKeyword = null;
         last = this.root;
+        if (preKeyword) {
+          this.replaceStr(ret, preKeyword, func);
+          preKeyword = null;
+          buf = [];
+          if (match) {
+            i = i - match - 1;
+            continue;
+          }
+        } else if (buf.length) {
+          ret.push.apply(ret, buf);
+          buf = [];
+        }
       }
-      last = last.get(ch) || this.root;
-      if (last.getResult()) {
-        preKeyword = last.getResult();
+      last = last.get(ch);
+      if (!last) {
+        last = this.root;
+        ret.push(ch);
+      } else if (!last.leaf || last.getResult()) {
+        buf.push(ch);
+        preKeyword = last.getResult() || preKeyword;
         count++;
         if (i === length - 1) {
-          this.replaceStr(ret, preKeyword, func, count);
+          if (preKeyword) {
+            this.replaceStr(ret, preKeyword, func);
+            const match = count - (preKeyword && preKeyword.length);
+            preKeyword = null;
+            count = 0;
+            buf = [];
+            i = i - match;
+          } else {
+            ret.push(ch);
+          }
         }
-      } else {
-        ret.push(ch);
       }
     }
     return ret.join('');
   }
 
-  replaceStr(ret, preKeyword, func, count) {
-    const length = preKeyword.length - count;
-    for (let t = 0; t < length; t++) ret.pop();
+  replaceStr(ret, preKeyword, func) {
     ret.push.apply(ret, func(preKeyword));
   }
 
