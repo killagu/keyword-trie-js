@@ -80,7 +80,7 @@ class TrieTree {
             continue;
           }
         } else if (buf.length) {
-          ret.push.apply(ret, buf);
+          buf.forEach(t => ret.push(t));
           buf = [];
         }
       }
@@ -101,7 +101,7 @@ class TrieTree {
             buf = [];
             i = i - match;
           } else {
-            ret.push(ch);
+            buf.forEach(t => ret.push(t));
           }
         }
       }
@@ -110,7 +110,7 @@ class TrieTree {
   }
 
   replaceStr(ret, preKeyword, func) {
-    ret.push.apply(ret, func(preKeyword));
+    func(preKeyword).forEach(t => ret.push(t));
   }
 
   /**

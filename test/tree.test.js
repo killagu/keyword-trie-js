@@ -190,6 +190,21 @@ describe('test tree', () => {
       });
     });
 
+    describe('556', () => {
+      before(() => {
+        keywords = ['556'];
+        str = 'test55';
+      });
+
+      it('should success', () => {
+        const tree = new TrieTree();
+        keywords.forEach(t => tree.add(t));
+        tree.compile();
+        const res = tree.replace(str, replaceFunc);
+        should.equal(res, 'test55');
+      });
+    })
+
   });
 
   describe('ten thousand keywords', () => {
